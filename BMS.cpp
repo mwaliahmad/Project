@@ -3,12 +3,14 @@
 #include <conio.h>
 #include <iomanip>
 #include <ctime>
+#include <string>
 
 using namespace std;
 
 // prototypes
+int time();
 void menuName(string menu, string subMenu);
-// string setcolor(unsigned short color);
+string setcolor(unsigned short color);
 string isAlpha(string input);
 string isNum(string input);
 string isBG(string input);
@@ -109,13 +111,14 @@ void printHeader()
     gotoxy(78, 1);
     cout << date_time << endl;
     cout << endl;
+    setcolor(12);
     cout << "             ____  _                 _   _____                    _   _              " << endl;
     cout << "            |  _ \\| |               | | |  __ \\                  | | (_)                  " << endl;
     cout << "            | |_) | | ___   ___   __| | | |  | | ___  _ __   __ _| |_ _  ___  _ __         " << endl;
     cout << "            |  _ <| |/ _ \\ / _ \\ / _` | | |  | |/ _ \\| '_ \\ / _` | __| |/ _ \\| '_ \\         " << endl;
     cout << "            | |_) | | (_) | (_) | (_| | | |__| | (_) | | | | (_| | |_| | (_) | | | |         " << endl;
     cout << "            |____/|_|\\___/ \\___/ \\__,_| |_____/ \\___/|_| |_|\\__,_|\\__|_|\\___/|_| |_|          " << endl;
-
+    setcolor(11);
     cout << "  __  __                                                   _      _____           _               " << endl;
     cout << " |  \\/  |                                                 | |    / ____|         | |               " << endl;
     cout << " | \\  / | __ _ _ __   __ _  __ _  ___ _ __ ___   ___ _ __ | |_  | (___  _   _ ___| |_ ___ _ __ ___  " << endl;
@@ -124,6 +127,7 @@ void printHeader()
     cout << " |_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_| |_| |_|\\___|_| |_|\\__| |_____/ \\__, |___/\\__\\___|_| |_| |_| " << endl;
     cout << "                            __/ |                                        __/ |                       " << endl;
     cout << "                           |___/                                        |___/                      " << endl;
+    setcolor(15);
 }
 
 int login()
@@ -350,7 +354,7 @@ void addDonor()
     cout << "Enter Name: ";
     nameD[indexD] = isAlpha(nameD[indexD]);
 
-    cout << "Enter Age: ";
+    cout << "Enter Age(+18): ";
     ageD[indexD] = isNum(ageD[indexD]);
 
     cout << "Enter Bloodgroup: ";
@@ -359,7 +363,7 @@ void addDonor()
     cout << "Enter City: ";
     cityD[indexD] = isAlpha(cityD[indexD]);
 
-    cout << "Enter Contact No.: ";
+    cout << "Enter Contact No.(11 numbers): ";
     contactD[indexD] = contactCheck(contactD[indexD]);
 
     contributerD[indexD] = contributer;
@@ -454,7 +458,7 @@ void updateDonor()
             cout << "Enter Name: ";
             nameD[index] = isAlpha(nameD[index]);
 
-            cout << "Enter Age: ";
+            cout << "Enter Age(+18): ";
             ageD[index] = isNum(ageD[index]);
 
             cout << "Enter Bloodgroup: ";
@@ -463,7 +467,7 @@ void updateDonor()
             cout << "Enter City: ";
             cityD[index] = isAlpha(cityD[index]);
 
-            cout << "Enter Contact No.: ";
+            cout << "Enter Contact No. (11 numbers): ";
             contactD[index] = contactCheck(contactD[index]);
             contributerD[index] = contributer;
             cout << endl;
@@ -577,7 +581,7 @@ void addRecipient()
     cout << "Enter Name: ";
     nameR[indexR] = isAlpha(nameR[indexR]);
 
-    cout << "Enter Age: ";
+    cout << "Enter Age(+18): ";
     ageR[indexR] = isNum(ageR[indexR]);
 
     cout << "Enter Bloodgroup: ";
@@ -586,7 +590,7 @@ void addRecipient()
     cout << "Enter City: ";
     cityR[indexR] = isAlpha(cityR[indexR]);
 
-    cout << "Enter Contact No.: ";
+    cout << "Enter Contact No.(11 numbers): ";
     contactR[indexR] = contactCheck(contactR[indexR]);
 
     contributerR[indexR] = contributer;
@@ -680,7 +684,7 @@ void updateRecipient()
             cout << "Enter Name: ";
             nameR[index] = isAlpha(nameR[index]);
 
-            cout << "Enter Age: ";
+            cout << "Enter Age(+18): ";
             ageR[index] = isNum(ageR[index]);
 
             cout << "Enter Bloodgroup: ";
@@ -689,7 +693,7 @@ void updateRecipient()
             cout << "Enter City: ";
             cityR[index] = isAlpha(cityR[index]);
 
-            cout << "Enter Contact No.: ";
+            cout << "Enter Contact No.(11 numbers): ";
             contactR[index] = contactCheck(contactR[index]);
             contributerR[index] = contributer;
             cout << endl;
@@ -800,13 +804,13 @@ void addEmployee()
     cout << "Enter Name: ";
     nameE[indexE] = isAlpha(nameE[indexE]);
 
-    cout << "Enter Age: ";
+    cout << "Enter Age(+18): ";
     ageE[indexE] = isNum(ageE[indexE]);
 
-    cout << "Enter CNIC: ";
+    cout << "Enter CNIC(13 numbers): ";
     cnicE[indexE] = cnicCheck(cnicE[indexE]);
 
-    cout << "Enter Contact No: ";
+    cout << "Enter Contact No(11 numbers): ";
     contactE[indexE] = contactCheck(contactE[indexE]);
 
     cout << "Enter Username: ";
@@ -909,13 +913,13 @@ void updateEmployee()
             cout << "Enter Name: ";
             nameE[index] = isAlpha(nameE[index]);
 
-            cout << "Enter Age: ";
+            cout << "Enter Age(+18): ";
             ageE[index] = isNum(ageE[index]);
 
-            cout << "Enter CNIC: ";
+            cout << "Enter CNIC(13 numbers): ";
             cnicE[index] = cnicCheck(cnicE[index]);
 
-            cout << "Enter Contact No: ";
+            cout << "Enter Contact No(11 numbers): ";
             contactE[index] = contactCheck(contactE[index]);
 
             cout << "Enter Username: ";
@@ -1161,12 +1165,12 @@ void menuName(string menu, string subMenu)
     cout << "-------------------------" << endl;
 }
 
-// string setcolor(unsigned short color)
-// {
-//     HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
-//     SetConsoleTextAttribute(hcon, color);
-//     return "";
-// }
+string setcolor(unsigned short color)
+{
+    HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hcon, color);
+    return "";
+}
 
 string isAlpha(string input)
 {
@@ -1203,6 +1207,7 @@ string isAlpha(string input)
             cin.clear();
             cin.ignore();
             cout << "Wrong Charater..." << endl;
+            cout << "Enter Again: ";
             cin >> input;
         }
     }
@@ -1212,6 +1217,7 @@ string isNum(string input)
 {
 
     cin >> input;
+    int x;
     int size;
     int check;
     bool flap;
@@ -1236,16 +1242,30 @@ string isNum(string input)
         }
         if (flap == true)
         {
-            return input;
+            x = stoi(input);
+            if (x >= 18 && x <= 60)
+            {
+                return input;
+            }
+            else
+            {
+                cin.clear();
+                cin.ignore();
+                cout << "Wrong Age..." << endl;
+                cout << "Enter age: ";
+                cin >> input;
+            }
         }
         else
         {
             cin.clear();
             cin.ignore();
-            cout << "Wrong Charater..." << endl;
+            cout << "Wrong Age..." << endl;
+            cout << "Enter age: ";
             cin >> input;
         }
     }
+    return 0;
 }
 
 string isBG(string input)
@@ -1263,6 +1283,7 @@ string isBG(string input)
             cin.clear();
             cin.ignore();
             cout << "Wrong Bloodgroup..." << endl;
+            cout << "Enter Blood: ";
             cin >> input;
         }
     }
@@ -1304,6 +1325,7 @@ string contactCheck(string contact)
             cin.clear();
             cin.ignore();
             cout << "Wrong Contact info..." << endl;
+            cout << "Enter Contact No (11 numbers): ";
             cin >> contact;
         }
     }
@@ -1343,6 +1365,7 @@ string cnicCheck(string cnic)
             cin.clear();
             cin.ignore();
             cout << "Wrong CNIC..." << endl;
+            cout << "Enter CNIC (13 numbers): ";
             cin >> cnic;
         }
     }
@@ -1379,6 +1402,7 @@ string usercheck(string username)
             cin.clear();
             cin.ignore();
             cout << "Username Already Present..." << endl;
+            cout << "Enter Username: ";
             cin >> username;
         }
         else
