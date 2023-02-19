@@ -8,7 +8,6 @@
 using namespace std;
 
 // prototypes
-int time();
 void menuName(string menu, string subMenu);
 string setcolor(unsigned short color);
 string isAlpha(string input);
