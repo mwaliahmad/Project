@@ -367,6 +367,7 @@ void addDonor()
 
     contributerD[indexD] = contributer;
     indexD++;
+
     cout << endl;
     cout << "Donor Added Sucessfully...";
     Sleep(400);
@@ -848,7 +849,7 @@ void deleteEmployee()
             index = idx;
             cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "CNIC" << left << setw(20) << "Contact No." << left << setw(20) << "Username" << left << setw(20) << "Password" << endl;
             cout << endl;
-            cout << left << setw(20) << nameE[index] << left << setw(20) << ageE[index] << left << setw(20) << cnicE[index] << left << setw(20) << contactR[index] << left << setw(20) << usernameE[index] << left << setw(20) << passwordE[index] << endl;
+            cout << left << setw(20) << nameE[index] << left << setw(20) << ageE[index] << left << setw(20) << cnicE[index] << left << setw(20) << contactE[index] << left << setw(20) << usernameE[index] << left << setw(20) << passwordE[index] << endl;
 
             for (int j = idx; j <= 5 - 1; j++)
             {

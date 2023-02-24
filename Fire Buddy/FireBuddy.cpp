@@ -11,6 +11,10 @@ char fireBuddyHand = 155;
 char Buddyhead[4] = {' ', fireBuddyHead, ' ', ' '};
 char Buddybody[4] = {'<', fireBuddyBody, '~', fireBuddyHand};
 char Buddyfoot[4] = {'/', ' ', '\\', ' '};
+
+char BuddyheadLeft[4] = {' ', ' ', fireBuddyHead, ' '};
+char BuddybodyLeft[4] = {fireBuddyHand, '~', fireBuddyBody, '>'};
+char BuddyfootLeft[4] = {' ', '/', ' ', '\\'};
 int BuddyX = 2;
 int BuddyY = 22;
 // 2,22
@@ -59,6 +63,7 @@ int menu();
 void printMaze();
 
 void printBuddy();
+void printBuddyLeft();
 void moveBuddyDown();
 void moveBuddyUp();
 void moveBuddyLeft();
@@ -463,6 +468,28 @@ void printBuddy()
     }
     setcolor(15);
 }
+
+void printBuddyLeft()
+{
+    setcolor(12);
+    gotoxy(BuddyX, BuddyY);
+    for (int i = 0; i < 4; i++)
+    {
+        cout << BuddyheadLeft[i];
+    }
+    gotoxy(BuddyX, BuddyY + 1);
+    for (int i = 0; i < 4; i++)
+    {
+        cout << BuddybodyLeft[i];
+    }
+    gotoxy(BuddyX, BuddyY + 2);
+    for (int i = 0; i < 4; i++)
+    {
+        cout << BuddyfootLeft[i];
+    }
+    setcolor(15);
+}
+
 void eraseBuddy()
 {
     setcolor(12);
@@ -537,14 +564,14 @@ void moveBuddyLeft()
     {
         eraseBuddy();
         BuddyX--;
-        printBuddy();
+        printBuddyLeft();
     }
     if (next == '$' || next1 == '$' || next2 == '$')
     {
         score = score + 10;
         eraseBuddy();
         BuddyX--;
-        printBuddy();
+        printBuddyLeft();
     }
 }
 
