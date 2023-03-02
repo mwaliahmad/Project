@@ -9,52 +9,51 @@
 using namespace std;
 
 // prototypes
-void menuName(string menu, string subMenu);
-string setcolor(unsigned short color);
-string isAlpha(string input);
-string isNum(string input);
-string isBG(string input);
-string contactCheck(string contact);
-string cnicCheck(string cnic);
-string usercheck(string username);
-int choiceCheck(int choice);
-void gotoxy(int x, int y);
 void printHeader();
 int login();
 void adminMenu();
 void printAMenu();
 void employeeMenu();
 void printEMenu();
-void addDonor();
+void addDonor(); // Donor Functions
 void deleteDonor();
 void updateDonor();
 void searchDonor();
 void viewDonor();
-void addRecipient();
+void addRecipient(); // Recipient Functions
 void deleteRecipient();
 void updateRecipient();
 void searchRecipient();
 void viewRecipient();
-void addEmployee();
+void addEmployee(); // Employee Functions
 void deleteEmployee();
 void updateEmployee();
 void searchEmployee();
 void viewEmployee();
-void searchDonorbyAdmin();
+void searchDonorbyAdmin(); // Functions for admin
 void viewDonorbyAdmin();
 void searchRecipientbyAdmin();
 void viewRecipientbyAdmin();
-void DonorToFile(string name, string age, string bloodgroup, string city, string contact, string contributer);
-void RecipientToFile(string name, string age, string bloodgroup, string city, string contact, string contributer);
-void EmployeeToFile(string name, string age, string cnic, string contact, string username, string password);
-void LoadDonor();
-void LoadRecipient();
-void LoadEmployee();
-void updateDonorFile();
-void updateRecipientFile();
-void updateRecipientFile();
-void updateEmployeeFile();
+void menuName(string menu, string subMenu);                                                                        // print submenu
+string setcolor(unsigned short color);                                                                             // color set
+string isAlpha(string input);                                                                                      // functions for input
+string isNum(string input);                                                                                        // functions for input
+string isBG(string input);                                                                                         // functions for input
+string contactCheck(string contact);                                                                               // functions for input
+string cnicCheck(string cnic);                                                                                     // functions for input
+string usercheck(string username);                                                                                 // functions for input
+int choiceCheck(int choice);                                                                                       // functions for input
+void DonorToFile(string name, string age, string bloodgroup, string city, string contact, string contributer);     // store data to file
+void RecipientToFile(string name, string age, string bloodgroup, string city, string contact, string contributer); // store data to file
+void EmployeeToFile(string name, string age, string cnic, string contact, string username, string password);       // store data to file
+void LoadDonor();                                                                                                  // load file to arrays
+void LoadRecipient();                                                                                              // load file to arrays
+void LoadEmployee();                                                                                               // load file to arrays
+void updateDonorFile();                                                                                            // update file
+void updateEmployeeFile();                                                                                         // update file
+void updateRecipientFile();                                                                                        // update file
 string Dataparse(string line, int field);
+void gotoxy(int x, int y);
 
 // employee data
 string nameE[100];
@@ -64,7 +63,7 @@ string passwordE[100];
 string cnicE[100];
 string contactE[100];
 string contributer;
-int indexE = 0;
+int indexE = 0; // index for employees arrays
 
 // donor data
 string nameD[100];
@@ -74,7 +73,7 @@ string cityD[100];
 string statusD[100];
 string contactD[100];
 string contributerD[100];
-int indexD = 0;
+int indexD = 0; // index for donors arrays
 
 // recipient data
 string nameR[100];
@@ -83,7 +82,7 @@ string bloodgroupR[100];
 string cityR[100];
 string contactR[100];
 string contributerR[100];
-int indexR = 0;
+int indexR = 0; // index for recipients arrays
 
 main()
 {
@@ -115,14 +114,14 @@ main()
         {
             cout << endl;
             cout << "Wrong Credentials!! Try again!!";
-            Sleep(3100);
+            Sleep(300);
         }
     }
 }
 
 void printHeader()
 {
-    time_t now = time(0);
+    time_t now = time(0); // date display
     char *date_time = ctime(&now);
     gotoxy(78, 1);
     cout << date_time << endl;
@@ -167,7 +166,7 @@ int login()
     }
     else
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 100; i++)
         {
             if (username == usernameE[i] && password == passwordE[i])
             {
@@ -403,7 +402,7 @@ void addDonor()
 
     cout << endl;
     cout << "Donor Added Sucessfully...";
-    Sleep(400);
+    Sleep(300);
     cout << endl;
     cout << "Press any key for back...";
     getch();
@@ -421,7 +420,9 @@ void deleteDonor()
     cout << endl;
     cout << endl;
     cout << "Enter Name of the Donor: ";
-    cin >> deleteName;
+    cin.clear();
+    cin.sync();
+    getline(cin >> ws, deleteName);
     cout << endl;
     bool notFound = true;
     for (int idx = 0; idx < 100; idx++)
@@ -432,7 +433,7 @@ void deleteDonor()
             cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "Bloodgroup" << left << setw(20) << "City" << left << setw(20) << "Contact No." << endl;
             cout << endl;
             cout << left << setw(20) << nameD[index] << left << setw(20) << ageD[index] << left << setw(20) << bloodgroupD[index] << left << setw(20) << cityD[index] << left << setw(20) << contactD[index] << endl;
-            for (int j = idx; j <= 5 - 1; j++)
+            for (int j = idx; j <= 100 - 1; j++)
             {
                 nameD[j] = nameD[j + 1];
                 ageD[j] = ageD[j + 1];
@@ -482,7 +483,9 @@ void updateDonor()
     cout << endl;
     cout << endl;
     cout << "Enter Name of the Donor: ";
-    cin >> updateName;
+    cin.clear();
+    cin.sync();
+    getline(cin >> ws, updateName);
     cout << endl;
     bool notFound = true;
     for (int idx = 0; idx < 100; idx++)
@@ -657,7 +660,7 @@ void addRecipient()
     indexR++;
     cout << endl;
     cout << "Recipient Added Sucessfully...";
-    Sleep(3100);
+    Sleep(300);
     cout << endl;
     cout << "Press any key for back...";
     getch();
@@ -674,7 +677,9 @@ void deleteRecipient()
     cout << endl;
     cout << endl;
     cout << "Enter Name of the Recipient: ";
-    cin >> deleteName;
+    cin.clear();
+    cin.sync();
+    getline(cin >> ws, deleteName);
     cout << endl;
     bool notFound = true;
     for (int idx = 0; idx < 100; idx++)
@@ -685,7 +690,7 @@ void deleteRecipient()
             cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "Bloodgroup" << left << setw(20) << "City" << left << setw(20) << "Contact No." << endl;
             cout << endl;
             cout << left << setw(20) << nameR[index] << left << setw(20) << ageR[index] << left << setw(20) << bloodgroupR[index] << left << setw(20) << cityR[index] << left << setw(20) << contactR[index] << endl;
-            for (int j = idx; j <= 5 - 1; j++)
+            for (int j = idx; j <= 100 - 1; j++)
             {
                 nameR[j] = nameR[j + 1];
                 ageR[j] = ageR[j + 1];
@@ -735,7 +740,9 @@ void updateRecipient()
     cout << endl;
     cout << endl;
     cout << "Enter Name of the Recipient: ";
-    cin >> updateName;
+    cin.clear();
+    cin.sync();
+    getline(cin >> ws, updateName);
     cout << endl;
     bool notFound = true;
     for (int idx = 0; idx < 100; idx++)
@@ -793,7 +800,7 @@ void updateRecipient()
 void searchRecipient()
 {
     int index;
-    string searchName;
+    string searchBG;
     cout << endl;
     string menu = "Employee Menu";
     string subMenu = "Search Recipient ";
@@ -801,7 +808,7 @@ void searchRecipient()
     cout << endl;
     cout << endl;
     cout << "Enter Bloodgroup of the Recipient: ";
-    cin >> searchName;
+    cin >> searchBG;
     bool notFound = true;
     bool one = false;
     cout << endl;
@@ -810,7 +817,7 @@ void searchRecipient()
 
     for (int idx = 0; idx < 100; idx++)
     {
-        if (searchName == bloodgroupR[idx] && (contributer == contributerR[idx]))
+        if (searchBG == bloodgroupR[idx] && (contributer == contributerR[idx]))
         {
             index = idx;
             cout << left << setw(20) << nameR[index] << left << setw(20) << ageR[index] << left << setw(20) << bloodgroupR[index] << left << setw(20) << cityR[index] << left << setw(20) << contactR[index] << endl;
@@ -924,7 +931,9 @@ void deleteEmployee()
     cout << endl;
     cout << endl;
     cout << "Enter Username of the Employee: ";
-    cin >> deleteName;
+    cin.clear();
+    cin.sync();
+    getline(cin >> ws, deleteName);
     cout << endl;
     bool notFound = true;
     for (int idx = 0; idx < 100; idx++)
@@ -936,7 +945,7 @@ void deleteEmployee()
             cout << endl;
             cout << left << setw(20) << nameE[index] << left << setw(20) << ageE[index] << left << setw(20) << cnicE[index] << left << setw(20) << contactE[index] << left << setw(20) << usernameE[index] << left << setw(20) << passwordE[index] << endl;
 
-            for (int j = idx; j <= 5 - 1; j++)
+            for (int j = idx; j <= 100 - 1; j++)
             {
                 nameE[j] = nameE[j + 1];
                 ageE[j] = ageE[j + 1];
@@ -986,7 +995,9 @@ void updateEmployee()
     cout << endl;
     cout << endl;
     cout << "Enter CNIC of the Employee: ";
-    cin >> updateName;
+    cin.clear();
+    cin.sync();
+    getline(cin >> ws, updateName);
     cout << endl;
     bool notFound = true;
     for (int idx = 0; idx < 100; idx++)
@@ -1313,7 +1324,9 @@ string setcolor(unsigned short color)
 string isAlpha(string input)
 {
 
-    cin >> input;
+    cin.clear();
+    cin.sync();
+    getline(cin >> ws, input);
     int size;
     int check;
     bool flap;
@@ -1322,18 +1335,15 @@ string isAlpha(string input)
         size = input.length();
         for (int i = 0; i < size; i++)
         {
-            if (input[i] != ' ')
+            check = int(input[i]);
+            if ((check >= 65 && check <= 90) || (check >= 97 && check <= 122) || input[i] == ' ')
             {
-                check = int(input[i]);
-                if ((check >= 65 && check <= 90) || (check >= 97 && check <= 122))
-                {
-                    flap = true;
-                }
-                else
-                {
-                    flap = false;
-                    break;
-                }
+                flap = true;
+            }
+            else
+            {
+                flap = false;
+                break;
             }
         }
         if (flap == true)
@@ -1343,10 +1353,10 @@ string isAlpha(string input)
         else
         {
             cin.clear();
-            cin.ignore();
+            cin.sync();
             cout << "Wrong Charater..." << endl;
             cout << "Enter Again: ";
-            cin >> input;
+            getline(cin >> ws, input);
         }
     }
 }
@@ -1388,7 +1398,7 @@ string isNum(string input)
             else
             {
                 cin.clear();
-                cin.ignore();
+                cin.sync();
                 cout << "Wrong Age..." << endl;
                 cout << "Enter age: ";
                 cin >> input;
@@ -1397,7 +1407,7 @@ string isNum(string input)
         else
         {
             cin.clear();
-            cin.ignore();
+            cin.sync();
             cout << "Wrong Age..." << endl;
             cout << "Enter age: ";
             cin >> input;
@@ -1419,7 +1429,7 @@ string isBG(string input)
         else
         {
             cin.clear();
-            cin.ignore();
+            cin.sync();
             cout << "Wrong Bloodgroup..." << endl;
             cout << "Enter Blood: ";
             cin >> input;
@@ -1461,7 +1471,7 @@ string contactCheck(string contact)
         else
         {
             cin.clear();
-            cin.ignore();
+            cin.sync();
             cout << "Wrong Contact info..." << endl;
             cout << "Enter Contact No (11 numbers): ";
             cin >> contact;
@@ -1501,7 +1511,7 @@ string cnicCheck(string cnic)
         else
         {
             cin.clear();
-            cin.ignore();
+            cin.sync();
             cout << "Wrong CNIC..." << endl;
             cout << "Enter CNIC (13 numbers): ";
             cin >> cnic;
@@ -1518,7 +1528,7 @@ int choiceCheck(int choice)
         if (cin.fail())
         {
             cin.clear();
-            cin.ignore();
+            cin.sync();
             cout << "Wrong Option..." << endl;
             cout << "Enter Option: ";
             cin >> choice;
@@ -1538,14 +1548,14 @@ string usercheck(string username)
         if (username == usernameE[i])
         {
             cin.clear();
-            cin.ignore();
+            cin.sync();
             cout << "Username Already Present..." << endl;
             cout << "Enter Username: ";
             cin >> username;
         }
         else
         {
-            break;
+            continue;
         }
     }
     return username;
