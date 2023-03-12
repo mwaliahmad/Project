@@ -86,7 +86,7 @@ int indexR = 0; // index for recipients arrays
 
 main()
 {
-    LoadDonor();
+    LoadDonor(); // load files
     LoadRecipient();
     LoadEmployee();
     while (true)
@@ -98,21 +98,21 @@ main()
         if (user == 1)
         {
 
-            system("cls");
+            system("cls"); // calling admin interference
             printHeader();
             adminMenu();
         }
 
         else if (user == 2)
         {
-            system("cls");
+            system("cls"); // calling employee interference
             printHeader();
             employeeMenu();
         }
 
         else if (user == 3)
         {
-            cout << endl;
+            cout << endl; // if wrong credentials
             cout << "Wrong Credentials!! Try again!!";
             Sleep(300);
         }
@@ -126,7 +126,7 @@ void printHeader()
     gotoxy(78, 1);
     cout << date_time << endl;
     cout << endl;
-    setcolor(12);
+    setcolor(12); // header display
     cout << "             ____  _                 _   _____                    _   _              " << endl;
     cout << "            |  _ \\| |               | | |  __ \\                  | | (_)                  " << endl;
     cout << "            | |_) | | ___   ___   __| | | |  | | ___  _ __   __ _| |_ _  ___  _ __         " << endl;
@@ -156,13 +156,13 @@ int login()
     cout << endl;
     cout << endl;
     cout << endl;
-    cout << "Enter Username: ";
+    cout << "Enter Username: "; // inputs
     cin >> username;
     cout << "Enter Password: ";
     cin >> password;
     if (username == "admin" && password == "admin")
     {
-        choice = 1;
+        choice = 1; // for admin
     }
     else
     {
@@ -171,7 +171,7 @@ int login()
             if (username == usernameE[i] && password == passwordE[i])
             {
                 contributer = username;
-                choice = 2;
+                choice = 2; // for employee
                 break;
             }
             else
@@ -192,11 +192,11 @@ void adminMenu()
         printHeader();
         cout << endl;
         cout << endl;
-        string menu = "Login";
+        string menu = "Login"; // submenu variables
         string subMenu = "Admin Menu";
         menuName(menu, subMenu);
-        printAMenu();
-        choice = choiceCheck(choice);
+        printAMenu();                 // menu
+        choice = choiceCheck(choice); // admin options
         if (choice == 1)
         {
             system("cls");
@@ -283,11 +283,11 @@ void employeeMenu()
         printHeader();
         cout << endl;
         cout << endl;
-        string menu = "Login";
+        string menu = "Login"; // submenu variables
         string subMenu = "Employee Menu";
         menuName(menu, subMenu);
         printEMenu();
-        choice = choiceCheck(choice);
+        choice = choiceCheck(choice); // employee options
         if (choice == 1)
         {
             system("cls");
@@ -374,12 +374,12 @@ void addDonor()
 {
 
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Add Donor ";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Details of the New Donor:-" << endl;
+    cout << "Enter Details of the New Donor:-" << endl; // details
     cout << endl;
     cout << "Enter Name: ";
     nameD[indexD] = isAlpha(nameD[indexD]);
@@ -397,7 +397,7 @@ void addDonor()
     contactD[indexD] = contactCheck(contactD[indexD]);
 
     contributerD[indexD] = contributer;
-    DonorToFile(nameD[indexD], ageD[indexD], bloodgroupD[indexD], cityD[indexD], contactD[indexD], contributerD[indexD]);
+    DonorToFile(nameD[indexD], ageD[indexD], bloodgroupD[indexD], cityD[indexD], contactD[indexD], contributerD[indexD]); // to file
     indexD++;
 
     cout << endl;
@@ -414,12 +414,12 @@ void deleteDonor()
     int index;
     string deleteName;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Delete Donor ";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Name of the Donor: ";
+    cout << "Enter Name of the Donor: "; // donor name
     cin.clear();
     cin.sync();
     getline(cin >> ws, deleteName);
@@ -433,7 +433,7 @@ void deleteDonor()
             cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "Bloodgroup" << left << setw(20) << "City" << left << setw(20) << "Contact No." << endl;
             cout << endl;
             cout << left << setw(20) << nameD[index] << left << setw(20) << ageD[index] << left << setw(20) << bloodgroupD[index] << left << setw(20) << cityD[index] << left << setw(20) << contactD[index] << endl;
-            for (int j = idx; j <= 100 - 1; j++)
+            for (int j = idx; j <= 100 - 1; j++) // moving arrays one index back
             {
                 nameD[j] = nameD[j + 1];
                 ageD[j] = ageD[j + 1];
@@ -477,12 +477,12 @@ void updateDonor()
     int index;
     string updateName;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Update Donor ";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Name of the Donor: ";
+    cout << "Enter Name of the Donor: "; // donor name
     cin.clear();
     cin.sync();
     getline(cin >> ws, updateName);
@@ -496,7 +496,7 @@ void updateDonor()
             cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "Bloodgroup" << left << setw(20) << "City" << left << setw(20) << "Contact No." << endl;
             cout << endl;
             cout << left << setw(20) << nameD[index] << left << setw(20) << ageD[index] << left << setw(20) << bloodgroupD[index] << left << setw(20) << cityD[index] << left << setw(20) << contactD[index] << endl;
-            cout << endl;
+            cout << endl; // update details
             cout << "Enter Name: ";
             nameD[index] = isAlpha(nameD[index]);
 
@@ -546,12 +546,12 @@ void searchDonor()
     string searchBG;
     string check;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Search Donor ";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Bloodgroup of the Donor: ";
+    cout << "Enter Bloodgroup of the Donor: "; // blood group
     cin >> searchBG;
     bool notFound = true;
     bool one = false;
@@ -562,7 +562,7 @@ void searchDonor()
     for (int idx = 0; idx < 100; idx++)
     {
 
-        if (searchBG == bloodgroupD[idx] && (contributer == contributerD[idx]))
+        if (searchBG == bloodgroupD[idx] && (contributer == contributerD[idx])) // display donor
         {
             index = idx;
             cout << left << setw(20) << nameD[index] << left << setw(20) << ageD[index] << left << setw(20) << bloodgroupD[index] << left << setw(20) << cityD[index] << left << setw(20) << contactD[index] << endl;
@@ -595,7 +595,7 @@ void viewDonor()
 {
     bool flag = false;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "View All Donors ";
     menuName(menu, subMenu);
     cout << endl;
@@ -607,7 +607,7 @@ void viewDonor()
 
     for (int index = 0; index < 100; index++)
     {
-        if ((nameD[index] != "") && (contributer == contributerD[index]))
+        if ((nameD[index] != "") && (contributer == contributerD[index])) // display
         {
             cout << left << setw(20) << nameD[index] << left << setw(20) << ageD[index] << left << setw(20) << bloodgroupD[index] << left << setw(20) << cityD[index] << left << setw(20) << contactD[index] << endl;
             flag = true;
@@ -631,13 +631,13 @@ void addRecipient()
 {
 
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Add Recipient ";
     menuName(menu, subMenu);
 
     cout << endl;
     cout << endl;
-    cout << "Enter Details of the New Recipient:-" << endl;
+    cout << "Enter Details of the New Recipient:-" << endl; // details
     cout << endl;
     cout << "Enter Name: ";
     nameR[indexR] = isAlpha(nameR[indexR]);
@@ -671,7 +671,7 @@ void deleteRecipient()
     int index;
     string deleteName;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Delete Recipient ";
     menuName(menu, subMenu);
     cout << endl;
@@ -690,7 +690,7 @@ void deleteRecipient()
             cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "Bloodgroup" << left << setw(20) << "City" << left << setw(20) << "Contact No." << endl;
             cout << endl;
             cout << left << setw(20) << nameR[index] << left << setw(20) << ageR[index] << left << setw(20) << bloodgroupR[index] << left << setw(20) << cityR[index] << left << setw(20) << contactR[index] << endl;
-            for (int j = idx; j <= 100 - 1; j++)
+            for (int j = idx; j <= 100 - 1; j++) // moving arrays one index back
             {
                 nameR[j] = nameR[j + 1];
                 ageR[j] = ageR[j + 1];
@@ -734,12 +734,12 @@ void updateRecipient()
     int index;
     string updateName;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Update Recipient ";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Name of the Recipient: ";
+    cout << "Enter Name of the Recipient: "; // recipient name
     cin.clear();
     cin.sync();
     getline(cin >> ws, updateName);
@@ -802,12 +802,12 @@ void searchRecipient()
     int index;
     string searchBG;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "Search Recipient ";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Bloodgroup of the Recipient: ";
+    cout << "Enter Bloodgroup of the Recipient: "; // bloodgroup name
     cin >> searchBG;
     bool notFound = true;
     bool one = false;
@@ -817,7 +817,7 @@ void searchRecipient()
 
     for (int idx = 0; idx < 100; idx++)
     {
-        if (searchBG == bloodgroupR[idx] && (contributer == contributerR[idx]))
+        if (searchBG == bloodgroupR[idx] && (contributer == contributerR[idx])) // display details
         {
             index = idx;
             cout << left << setw(20) << nameR[index] << left << setw(20) << ageR[index] << left << setw(20) << bloodgroupR[index] << left << setw(20) << cityR[index] << left << setw(20) << contactR[index] << endl;
@@ -850,7 +850,7 @@ void viewRecipient()
 {
     bool flag = false;
     cout << endl;
-    string menu = "Employee Menu";
+    string menu = "Employee Menu"; // submenu variables
     string subMenu = "View All Recipients ";
     menuName(menu, subMenu);
     cout << endl;
@@ -861,7 +861,7 @@ void viewRecipient()
     cout << endl;
     for (int index = 0; index < 100; index++)
     {
-        if ((nameR[index] != "") && (contributer == contributerR[index]))
+        if ((nameR[index] != "") && (contributer == contributerR[index])) // display all
         {
             cout << left << setw(20) << nameR[index] << left << setw(20) << ageR[index] << left << setw(20) << bloodgroupR[index] << left << setw(20) << cityR[index] << left << setw(20) << contactR[index] << endl;
             flag = true;
@@ -885,12 +885,12 @@ void addEmployee()
 {
 
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "Add Employee";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Details of the New Employee:-" << endl;
+    cout << "Enter Details of the New Employee:-" << endl; // details
     cout << endl;
     cout << "Enter Name: ";
     nameE[indexE] = isAlpha(nameE[indexE]);
@@ -910,7 +910,7 @@ void addEmployee()
     cout << "Enter Password: ";
     cin >> passwordE[indexE];
 
-    EmployeeToFile(nameE[indexE], ageE[indexE], cnicE[indexE], contactE[indexE], usernameE[indexE], passwordE[indexE]);
+    EmployeeToFile(nameE[indexE], ageE[indexE], cnicE[indexE], contactE[indexE], usernameE[indexE], passwordE[indexE]); // to file
     indexE++;
     cout << endl;
     cout << "Employee Added Sucessfully...";
@@ -925,12 +925,12 @@ void deleteEmployee()
     int index;
     string deleteName;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "Delete Employee";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Username of the Employee: ";
+    cout << "Enter Username of the Employee: "; // empolyee name
     cin.clear();
     cin.sync();
     getline(cin >> ws, deleteName);
@@ -945,7 +945,7 @@ void deleteEmployee()
             cout << endl;
             cout << left << setw(20) << nameE[index] << left << setw(20) << ageE[index] << left << setw(20) << cnicE[index] << left << setw(20) << contactE[index] << left << setw(20) << usernameE[index] << left << setw(20) << passwordE[index] << endl;
 
-            for (int j = idx; j <= 100 - 1; j++)
+            for (int j = idx; j <= 100 - 1; j++) // moving arrays one index back
             {
                 nameE[j] = nameE[j + 1];
                 ageE[j] = ageE[j + 1];
@@ -989,12 +989,12 @@ void updateEmployee()
     int index;
     string updateName;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "Update Employee";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter CNIC of the Employee: ";
+    cout << "Enter username of the Employee: ";
     cin.clear();
     cin.sync();
     getline(cin >> ws, updateName);
@@ -1002,13 +1002,13 @@ void updateEmployee()
     bool notFound = true;
     for (int idx = 0; idx < 100; idx++)
     {
-        if (updateName == cnicE[idx])
+        if (updateName == usernameE[idx])
         {
             index = idx;
             cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "CNIC" << left << setw(20) << "Contact No." << left << setw(20) << "Username" << left << setw(20) << "Password" << endl;
             cout << endl;
             cout << left << setw(20) << nameE[index] << left << setw(20) << ageE[index] << left << setw(20) << cnicE[index] << left << setw(20) << contactE[index] << left << setw(20) << usernameE[index] << left << setw(20) << passwordE[index] << endl;
-            cout << endl;
+            cout << endl; // update details
             cout << "Enter Name: ";
             nameE[index] = isAlpha(nameE[index]);
 
@@ -1061,12 +1061,12 @@ void searchEmployee()
     int index;
     string searchName;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "Search Employee";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter CNIC of the Employee: ";
+    cout << "Enter username of the Employee: "; // username employee
     cin >> searchName;
     bool notFound = true;
     bool one = false;
@@ -1075,7 +1075,7 @@ void searchEmployee()
     cout << endl;
     for (int idx = 0; idx < 100; idx++)
     {
-        if (searchName == cnicE[idx])
+        if (searchName == usernameE[idx])
         {
             index = idx;
             cout << left << setw(20) << nameE[index] << left << setw(20) << ageE[index] << left << setw(20) << cnicE[index] << left << setw(20) << contactE[index] << left << setw(20) << usernameE[index] << left << setw(20) << passwordE[index] << endl;
@@ -1108,7 +1108,7 @@ void viewEmployee()
 {
     bool flag = false;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "View All Employees";
     menuName(menu, subMenu);
     cout << endl;
@@ -1116,7 +1116,7 @@ void viewEmployee()
     cout << "Following Are the Employees: " << endl;
     cout << endl;
     cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "CNIC" << left << setw(20) << "Contact No." << left << setw(20) << "Username" << left << setw(20) << "Password" << endl;
-    cout << endl;
+    cout << endl; // display all
     for (int index = 0; index < 100; index++)
     {
         if (nameE[index] != "")
@@ -1144,12 +1144,12 @@ void searchDonorbyAdmin()
     int index;
     string searchName;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "Search Donor";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
-    cout << "Enter Bloodgroup of the Donor: ";
+    cout << "Enter Bloodgroup of the Donor: "; // bloodgroup
     cin >> searchName;
     bool notFound = true;
     bool one = false;
@@ -1158,7 +1158,7 @@ void searchDonorbyAdmin()
     cout << endl;
     for (int idx = 0; idx < 100; idx++)
     {
-        if (searchName == bloodgroupD[idx])
+        if (searchName == bloodgroupD[idx]) // display its details
         {
             index = idx;
             cout << left << setw(20) << nameD[index] << left << setw(20) << ageD[index] << left << setw(20) << bloodgroupD[index] << left << setw(20) << cityD[index] << left << setw(20) << contactD[index] << left << setw(20) << contributerD[index] << endl;
@@ -1191,7 +1191,7 @@ void viewDonorbyAdmin()
 {
     bool flag = false;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "View All Donors";
     menuName(menu, subMenu);
     cout << endl;
@@ -1200,7 +1200,7 @@ void viewDonorbyAdmin()
     cout << endl;
     cout << left << setw(20) << "Name" << left << setw(20) << "Age" << left << setw(20) << "Bloodgroup" << left << setw(20) << "City" << left << setw(20) << "Contact No." << left << setw(20) << "Contributer" << endl;
     cout << endl;
-    for (int index = 0; index < 100; index++)
+    for (int index = 0; index < 100; index++) // display all
     {
         if (nameD[index] != "")
         {
@@ -1227,13 +1227,13 @@ void searchRecipientbyAdmin()
     int index;
     string searchName;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "Search Recipient";
     menuName(menu, subMenu);
     cout << endl;
     cout << endl;
     cout << "Enter Bloodgroup of the Recipient: ";
-    cin >> searchName;
+    cin >> searchName; // bg name
     bool notFound = true;
     bool one = false;
     cout << endl;
@@ -1275,7 +1275,7 @@ void viewRecipientbyAdmin()
 {
     bool flag = false;
     cout << endl;
-    string menu = "Admin Menu";
+    string menu = "Admin Menu"; // submenu variables
     string subMenu = "View All Recipients";
     menuName(menu, subMenu);
     cout << endl;
@@ -1321,7 +1321,7 @@ string setcolor(unsigned short color)
     return "";
 }
 
-string isAlpha(string input)
+string isAlpha(string input) // name and city validation
 {
 
     cin.clear();
@@ -1361,7 +1361,7 @@ string isAlpha(string input)
     }
 }
 
-string isNum(string input)
+string isNum(string input) // age validation
 {
 
     cin >> input;
@@ -1416,7 +1416,7 @@ string isNum(string input)
     return 0;
 }
 
-string isBG(string input)
+string isBG(string input) // bloodgroup validation
 {
 
     cin >> input;
@@ -1439,7 +1439,7 @@ string isBG(string input)
     return input;
 }
 
-string contactCheck(string contact)
+string contactCheck(string contact) // contact validation
 {
     cin >> contact;
     int size;
@@ -1479,7 +1479,7 @@ string contactCheck(string contact)
     }
 }
 
-string cnicCheck(string cnic)
+string cnicCheck(string cnic) // cnic validation
 {
     cin >> cnic;
     int size;
@@ -1519,7 +1519,7 @@ string cnicCheck(string cnic)
     }
 }
 
-int choiceCheck(int choice)
+int choiceCheck(int choice) // choice validation
 {
 
     cin >> choice;
@@ -1540,12 +1540,12 @@ int choiceCheck(int choice)
     }
     return choice;
 }
-string usercheck(string username)
+string usercheck(string username) // username validation
 {
     cin >> username;
     for (int i = 0; i < 100; i++)
     {
-        if (username == usernameE[i])
+        if (username == usernameE[i] && username != "admin")
         {
             cin.clear();
             cin.sync();
@@ -1598,22 +1598,23 @@ void LoadDonor()
     fstream donorData;
     string line = "";
     donorData.open("DonorData.txt", ios::in);
-    while (!donorData.eof())
+    while (getline(donorData, line))
     {
-        getline(donorData, line);
+        if (line != "")
+        {
+            nameD[indexD] = Dataparse(line, 1);
 
-        nameD[indexD] = Dataparse(line, 1);
+            ageD[indexD] = Dataparse(line, 2);
 
-        ageD[indexD] = Dataparse(line, 2);
+            bloodgroupD[indexD] = Dataparse(line, 3);
 
-        bloodgroupD[indexD] = Dataparse(line, 3);
+            cityD[indexD] = Dataparse(line, 4);
 
-        cityD[indexD] = Dataparse(line, 4);
+            contactD[indexD] = Dataparse(line, 5);
 
-        contactD[indexD] = Dataparse(line, 5);
-
-        contributerD[indexD] = Dataparse(line, 6);
-        indexD++;
+            contributerD[indexD] = Dataparse(line, 6);
+            indexD++;
+        }
     }
 
     donorData.close();
@@ -1624,22 +1625,23 @@ void LoadRecipient()
     fstream recipientData;
     string line = "";
     recipientData.open("RecipientData.txt", ios::in);
-    while (!recipientData.eof())
+    while (getline(recipientData, line))
     {
-        getline(recipientData, line);
+        if (line != "")
+        {
+            nameR[indexR] = Dataparse(line, 1);
 
-        nameR[indexR] = Dataparse(line, 1);
+            ageR[indexR] = Dataparse(line, 2);
 
-        ageR[indexR] = Dataparse(line, 2);
+            bloodgroupR[indexR] = Dataparse(line, 3);
 
-        bloodgroupR[indexR] = Dataparse(line, 3);
+            cityR[indexR] = Dataparse(line, 4);
 
-        cityR[indexR] = Dataparse(line, 4);
+            contactR[indexR] = Dataparse(line, 5);
 
-        contactR[indexR] = Dataparse(line, 5);
-
-        contributerR[indexR] = Dataparse(line, 6);
-        indexR++;
+            contributerR[indexR] = Dataparse(line, 6);
+            indexR++;
+        }
     }
 
     recipientData.close();
@@ -1650,22 +1652,23 @@ void LoadEmployee()
     fstream employeeData;
     string line = "";
     employeeData.open("EmployeeData.txt", ios::in);
-    while (!employeeData.eof())
+    while (getline(employeeData, line))
     {
-        getline(employeeData, line);
+        if (line != "")
+        {
+            nameE[indexE] = Dataparse(line, 1);
 
-        nameE[indexE] = Dataparse(line, 1);
+            ageE[indexE] = Dataparse(line, 2);
 
-        ageE[indexE] = Dataparse(line, 2);
+            cnicE[indexE] = Dataparse(line, 3);
 
-        cnicE[indexE] = Dataparse(line, 3);
+            contactE[indexE] = Dataparse(line, 4);
 
-        contactE[indexE] = Dataparse(line, 4);
+            usernameE[indexE] = Dataparse(line, 5);
 
-        usernameE[indexE] = Dataparse(line, 5);
-
-        passwordE[indexE] = Dataparse(line, 6);
-        indexE++;
+            passwordE[indexE] = Dataparse(line, 6);
+            indexE++;
+        }
     }
 
     employeeData.close();

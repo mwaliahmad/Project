@@ -1,4 +1,3 @@
-Fasial Ilyas,19,AB+,lahore,03214265616,wali
 Rameen Ihtasham,18,A+,Lahore,03367309655,wali
 Maryam Waseem,18,O+,Lahore,03184121151,wali
 Abdul Sabur,20,O+,Lahore,03060020007,wali
