@@ -13,3 +13,4 @@ Najia Sheraz,22,B+,Lahore,03237712345,wali
 Nauman Ahmad,20,O+,Lahore,03214399336,wali
 Wali Allah,18,AB+,lahore,03366470094,wali
 Usman Kibria,19,AB+,Kasur,03269841349,wali
+Ali,34,AB-,Lahore,12345678912,waliahmad

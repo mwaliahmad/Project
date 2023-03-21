@@ -7,3 +7,4 @@ Abdul Rehman,20,A+,Lahore,03124647314,wali
 Wali Ahmad,19,A+,Lahore,03370433034,wali
 Noor ul Huda,21,O-,Lahore,03134464451,wali
 Najia Sheraz,22,B+,Lahore,03237712345,wali
+Ahma,34,A-,Lahore,12345678909,waliahmad

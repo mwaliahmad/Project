@@ -2,60 +2,13 @@
 #include <fstream>
 #include <windows.h>
 #include <conio.h>
-
+#include <cstdlib>
+#include <time.h>
 using namespace std;
 
-// Global data
-
-// Buddy in 2D arrays
-char Buddy[3][4];
-char BuddyLeft[3][4];
-// Buddy coordinates
-int BuddyX = 50;
-int BuddyY = 2;
-// 3,22
-
-int Buddyhealth = 100; // buddy health,jump and direction variable
-string printDirection = "right";
-bool isJump = false;
-int jumpTick = 0;
-
-// princess in 2D arrays
-char princess[3][3];
-int princessX = 28;
-int princessY = 1;
-int jailX = 26;
-int jailY = 4;
-
-// enemy in 2D arrays
-char Enemy[3][5];
-// Enemies coordinates
-int enemy1X = 62;
-int enemy1Y = 22;
-int enemy2X = 14;
-int enemy2Y = 14;
-string enemy1direction = "down";
-string enemy2direction = "left";
-
-// Ant in 2D arrays
-char Ant[3][5];;
-// Ant coordinates
-int AntX = 32;
-int AntY = 6;
-int AntBulletX[10];
-int AntBulletY[10];
-int AntCount = 0;
-
-// Kratos in 2D arrays
-char Kratos[3][7];
-int KratosX = 62;
-int KratosY = 22;
-
-int score = 0; // score
-
 // functions
-void cordinates(); // helping functions
-void complete();
+
+// helping functions
 void gotoxy(int x, int y);
 string setcolor(unsigned short color);
 char getCharAtxy(short int x, short int y);
@@ -71,163 +24,248 @@ void howToPlay();
 void instruction();
 void credits();
 int menu();
+void Lastcredits();
 
 void printMaze1(char Maze1[26][70]); // maze functions
 void printMaze2(char Maze2[26][71]);
 
-void printBuddy(); // buddy control, print functions
-void printBuddyLeft();
-void teleportBuddy();
-void eraseBuddy();
-void moveBuddyDown();
-void moveBuddyUp();
-void moveBuddyLeft();
-void moveBuddyRight();
-void printBuddyHealth();
-void controlBuddy();
-bool canJump();
+void printBuddy(char Buddy[3][4], int &BuddyX, int &BuddyY); // buddy control, print functions with passing arrays
+void printBuddyLeft(char BuddyLeft[3][4], int &BuddyX, int &BuddyY);
+void teleportBuddy(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY);
+void eraseBuddy(int &BuddyX, int &BuddyY);
+void moveBuddyDown(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY, string &printDirection, int &score);
+void moveBuddyUp(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY, string &printDirection, int &score, int &Buddyhealth);
+void moveBuddyLeft(char BuddyLeft[3][4], int &BuddyX, int &BuddyY, int &princessX, int &princessY, string &printDirection, int &check, bool &game, bool &game2, int &score);
+void moveBuddyRight(char Buddy[3][4], int &BuddyX, int &BuddyY, int &princessX, int &princessY, string &printDirection, int &check, bool &game, bool &game2, int &score, int &Enemy1health, int &Enemy2health, int &Anthealth);
+void printBuddyHealth(int &Buddyhealth);
+void controlBuddy(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY, int &princessX, int &princessY, string &printDirection, bool &isJump, int &jumpTick, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount, int &check, bool &game, bool &game2, int &score, int &Enemy1health, int &Enemy2health, int &Anthealth, int &Buddyhealth);
+bool canJump(int &BuddyX, int &BuddyY);
 
-void printPrincess();
-void erasePrincess();
-void movePrincessDown();
-void jailOpen();
+void printPrincess(char princess[3][3], int &princessX, int &princessY); // Princess control, print functions with passing arrays
+void erasePrincess(int &princessX, int &princessY);
+void movePrincessDown(char princess[3][3], int &princessX, int &princessY);
+void jailOpen(int &jailX, int &jailY);
 
-void createBullet(); // buddy bullets functions, arrays and array counter
-void movebullet();
+void createBullet(int &BuddyX, int &BuddyY, string &printDirection, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount); // buddy bullets functions, arrays and array counter
+void movebullet(int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount);
 void printBullet(int x, int y);
 void eraseBullet(int x, int y);
-void deleteBullet(int index);
-int bulletX[100];
-int bulletY[100];
-char bulletDirection[100];
-int bulletCount = 0;
+void deleteBullet(int index, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount);
 
-void printEnemy1(); // horzontal enemy functions and health variable
-void eraseEnemy1();
-void moveEnemy1();
-int Enemy1health = 50;
+void printEnemy1(char Enemy[3][5], int &enemy1X, int &enemy1Y); // horzontal enemy functions and health variable
+void eraseEnemy1(int &enemy1X, int &enemy1Y);
+void moveEnemy1(char Enemy[3][5], int &enemy1X, int &enemy1Y, string &enemy1direction, int &Enemy1health);
 
-void printEnemy2(); // vertical enemy functions and health variable
-void eraseEnemy2();
-void moveEnemy2();
-int Enemy2health = 50;
+void printEnemy2(char Enemy[3][5], int &enemy2X, int &enemy2Y); // vertical enemy functions and health variable
+void eraseEnemy2(int &enemy2X, int &enemy2Y);
+void moveEnemy2(char Enemy[3][5], int &enemy2X, int &enemy2Y, string &enemy2direction, int &Enemy2health);
 
-void printAnt(); // Ant and its bullet functions and health variable
-void eraseAnt();
-void AntBullet();
-void moveAntBullet();
+void printAnt(char Ant[3][5], int &AntX, int &AntY); // Ant and its bullet functions and health variable
+void eraseAnt(int &AntX, int &AntY);
+void AntBullet(int &BuddyX, int &BuddyY, int &AntX, int &AntY, int AntBulletX[10], int AntBulletY[10], int &AntCount, int &Anthealth, bool &AntFlag);
+void moveAntBullet(int AntBulletX[10], int AntBulletY[10], int &AntCount);
 void printAntBullet(int x, int y);
 void eraseAntBullet(int x, int y);
-void deleteAntBullet(int index);
-int Anthealth = 100;
+void deleteAntBullet(int index, int AntBulletX[10], int AntBulletY[10], int &AntCount);
 
-void printkratos(); // kratos functions and health variable
-void erasekratos();
-void movekratos();
-int kratosHealth = 200;
+void printkratos(char Kratos[3][7], int &KratosX, int &KratosY); // kratos functions and health variable
+void erasekratos(int &KratosX, int &KratosY);
+void movekratos(char Kratos[3][7], int &BuddyX, int &BuddyY, int &KratosX, int &KratosY, int &kratosHealth);
 
-void Printenemyhealth(); // printing enemies health
+void Printenemyhealth(bool &game, bool &game2, int &Enemy1health, int &Enemy2health, int &Anthealth, int &kratosHealth); // printing enemies health
 
-void collision(); // bullet collision function
+void collision(int &Buddyhealth, int &enemy1X, int &enemy1Y, int &enemy2X, int &enemy2Y, int &AntX, int &AntY, int &KratosX, int &KratosY, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount, int &Enemy1health, int &Enemy2health, int &Anthealth, int &kratosHealth, int &score); // bullet collision function
 
-void addScore(); // score print and increment function
-void printScore();
+void addScore(int &score); // score print and increment function
+void printScore(int &score);
 
-void gameoverCollsion(); // check gameover function
-void gameover();         // print gameover function
+void gameoverCollsion(int &BuddyX, int &BuddyY, int &Buddyhealth, int &enemy1X, int &enemy1Y, int &enemy2X, int &enemy2Y, int &KratosX, int &KratosY, int AntBulletX[10], int AntBulletY[10], int &AntCount, int &Enemy1health, int &Enemy2health, int &kratosHealth); // check gameover function
+void gameover(int &Buddyhealth, bool &game, bool &game2);                                                                                                                                                                                                              // print gameover function
+void complete(int &check, bool &game, bool &game2);                                                                                                                                                                                                                    // Game complete function
+void generateRandomCoin(int &count);                                                                                                                                                                                                                                   // random coin generator
 
-bool game = true; // flags for game
-bool AntFlag = true;
-
-int mainTick = 0;
-bool second = false;
-
-void loadMaze1(char Maze1[26][70]);
+void loadMaze1(char Maze1[26][70]); // loading arrays functions
 void loadMaze2(char Maze2[26][71]);
-void loadBuddy();
-void loadBuddyLeft();
-void loadPrincess();
-void loadEnemy();
-void loadAnt();
-void loadKratos();
+void loadBuddy(char Buddy[3][4]);
+void loadBuddyLeft(char BuddyLeft[3][4]);
+void loadPrincess(char princess[3][3]);
+void loadEnemy(char Enemy[3][5]);
+void loadAnt(char Ant[3][5]);
+void loadKratos(char Kratos[3][7]);
+void loadLevel(char &Level);
+void writeLevel(char &Level, char number); // level saver
 
 main()
 {
-    char Maze1[26][70];
+    char Maze1[26][70]; // All Arrays
     char Maze2[26][71];
+    char Buddy[3][4];
+    char BuddyLeft[3][4];
+    char princess[3][3];
+    char Enemy[3][5];
+    char Ant[3][5];
+    char Kratos[3][7];
+    char Level;
 
-    loadMaze1(Maze1);
+    loadMaze1(Maze1); // file load functions
     loadMaze2(Maze2);
-    loadBuddy();
-    loadBuddyLeft();
-    loadPrincess();
-    loadEnemy();
-    loadAnt();
-    loadKratos();
-    ShowConsoleCursor(false);
-    // firstPage();
-    // int x = menu();
+    loadBuddy(Buddy);
+    loadBuddyLeft(BuddyLeft);
+    loadPrincess(princess);
+    loadEnemy(Enemy);
+    loadAnt(Ant);
+    loadKratos(Kratos);
+    loadLevel(Level);
+    srand(time(0));
+
+    int BuddyX = 3; // buddy coordinates,health and other helping variables
+    int BuddyY = 22;
+    int Buddyhealth = 100;
+    string printDirection = "right";
+    bool isJump = false;
+    int jumpTick = 0;
+
+    int bulletX[100]; // buddy bullets coordinates and counter
+    int bulletY[100];
+    char bulletDirection[100];
+    int bulletCount = 0;
+
+    int princessX = 28; // princess coordinates
+    int princessY = 1;
+
+    int jailX = 26; // jail coordinates
+    int jailY = 4;
+
+    int enemy1X = 62; // enemy1 coordinates and health
+    int enemy1Y = 22;
+    string enemy1direction = "down";
+    int Enemy1health = 50;
+
+    int enemy2X = 14; // enemy2 coordinates and health
+    int enemy2Y = 14;
+    string enemy2direction = "left";
+    int Enemy2health = 50;
+
+    int AntX = 32; // Ant coordinates and health
+    int AntY = 6;
+    int Anthealth = 100;
+    bool AntFlag = true;
+
+    int AntBulletX[100]; // Ant bullets Arrays
+    int AntBulletY[100];
+    int AntCount = 0;
+
+    int KratosX = 62; // Kratos coordinates and health
+    int KratosY = 22;
+    int kratosHealth = 200;
+
+    int score = 0; // score
+
+    int check = 0; // flags for game
+    bool game = false;
+    bool game2 = false;
+    bool credit = false;
+    int count = 0;
+    int tick = 0;
+
+    ShowConsoleCursor(false); // remove cursors
+
+    firstPage(); // loading page and options menu
+    int x = menu();
     system("cls");
-    printMaze1(Maze1);
 
-    printEnemy1();
-    printEnemy2();
-    printAnt();
-
-    printBuddy();
-    // x == 1 &&
-    while (game)
+    if (Level == '1') // level one loader
     {
-        printScore();
-        printBuddyHealth();
+        game = true;
+        game2 = true;
+    }
+    if (x == 1 && game == true) // printing enemies and buddy for level one
+    {
+        printMaze1(Maze1);
+        printEnemy1(Enemy, enemy1X, enemy1Y);
+        printEnemy2(Enemy, enemy2X, enemy2Y);
+        printAnt(Ant, AntX, AntY);
+        printBuddy(Buddy, BuddyX, BuddyY);
+        KratosX = 0;
+        KratosY = 0;
+    }
 
-        gameover();
+    while (x == 1 && game) // level one loop
+    {
+        printScore(score);
+        printBuddyHealth(Buddyhealth);
 
-        moveEnemy1();
-        moveEnemy2();
+        gameover(Buddyhealth, game, game2);
 
-        AntBullet();
+        moveEnemy1(Enemy, enemy1X, enemy1Y, enemy1direction, Enemy1health);
+        moveEnemy2(Enemy, enemy2X, enemy2Y, enemy2direction, Enemy2health);
 
-        moveAntBullet();
-        gameoverCollsion();
-        movebullet();
-        collision();
-        Printenemyhealth();
-        controlBuddy();
+        AntBullet(BuddyX, BuddyY, AntX, AntY, AntBulletX, AntBulletY, AntCount, Anthealth, AntFlag);
+
+        moveAntBullet(AntBulletX, AntBulletY, AntCount);
+        gameoverCollsion(BuddyX, BuddyY, Buddyhealth, enemy1X, enemy1Y, enemy2X, enemy2Y, KratosX, KratosY, AntBulletX, AntBulletY, AntCount, Enemy1health, Enemy2health, kratosHealth);
+        movebullet(bulletX, bulletY, bulletDirection, bulletCount);
+        collision(Buddyhealth, enemy1X, enemy1Y, enemy2X, enemy2Y, AntX, AntY, KratosX, KratosY, bulletX, bulletY, bulletDirection, bulletCount, Enemy1health, Enemy2health, Anthealth, kratosHealth, score);
+        Printenemyhealth(game, game2, Enemy1health, Enemy2health, Anthealth, kratosHealth);
+        controlBuddy(Buddy, BuddyLeft, BuddyX, BuddyY, princessX, princessY, printDirection, isJump, jumpTick, bulletX, bulletY, bulletDirection, bulletCount, check, game, game2, score, Enemy1health, Enemy2health, Anthealth, Buddyhealth);
         Sleep(50);
-        // cordinates();
     }
     system("cls");
-    printMaze2(Maze2);
-    BuddyX = 3;
-    BuddyY = 22;
-    printBuddy();
-    printkratos();
-    printPrincess();
-
-    while (second)
+    writeLevel(Level, '2'); // level two loader
+    if (Level == '2')
     {
-        movePrincessDown();
-        printScore();
-        movekratos();
+        game2 = true;
+    }
+    if (game2 == true) // printing enemies and buddy for level two
+    {
+        printMaze2(Maze2);
+        BuddyX = 3;
+        BuddyY = 22;
+        KratosX = 62;
+        KratosY = 22;
+        printBuddy(Buddy, BuddyX, BuddyY);
+        printkratos(Kratos, KratosX, KratosY);
+        printPrincess(princess, princessX, princessY);
+        enemy1X = 0;
+        enemy1Y = 0;
+        enemy2X = 0;
+        enemy2Y = 0;
+        AntX = 0;
+        AntY = 0;
+    }
 
-        printBuddyHealth();
-        gameover();
-        gameoverCollsion();
-        movebullet();
-        collision();
-        Printenemyhealth();
-        controlBuddy();
-        teleportBuddy();
-
+    while (game2) // level two loop
+    {
+        movePrincessDown(princess, princessX, princessY);
+        controlBuddy(Buddy, BuddyLeft, BuddyX, BuddyY, princessX, princessY, printDirection, isJump, jumpTick, bulletX, bulletY, bulletDirection, bulletCount, check, game, game2, score, Enemy1health, Enemy2health, Anthealth, Buddyhealth);
+        printScore(score);
+        movekratos(Kratos, BuddyX, BuddyY, KratosX, KratosY, kratosHealth);
+        printBuddyHealth(Buddyhealth);
+        gameover(Buddyhealth, game, game2);
+        gameoverCollsion(BuddyX, BuddyY, Buddyhealth, enemy1X, enemy1Y, enemy2X, enemy2Y, KratosX, KratosY, AntBulletX, AntBulletY, AntCount, Enemy1health, Enemy2health, kratosHealth);
+        movebullet(bulletX, bulletY, bulletDirection, bulletCount);
+        collision(Buddyhealth, enemy1X, enemy1Y, enemy2X, enemy2Y, AntX, AntY, KratosX, KratosY, bulletX, bulletY, bulletDirection, bulletCount, Enemy1health, Enemy2health, Anthealth, kratosHealth, score);
+        Printenemyhealth(game, game2, Enemy1health, Enemy2health, Anthealth, kratosHealth);
+        teleportBuddy(Buddy, BuddyLeft, BuddyX, BuddyY);
+        if (tick == 10)
+        {
+            generateRandomCoin(count);
+            tick = 0;
+        }
         if (kratosHealth == -1)
         {
-            jailOpen();
+            jailOpen(jailX, jailY);
+            credit = true;
         }
-
+        tick++;
         Sleep(50);
     }
     system("cls");
+    writeLevel(Level, '1');
+    if (x == 1 && credit == true) // last credits
+    {
+        Lastcredits();
+    }
 }
 
 void header()
@@ -290,7 +328,6 @@ void printMaze1(char Maze1[26][70])
         {
             cout << Maze1[i][j];
         }
-        // Sleep(50);
         cout << endl;
     }
     setcolor(15);
@@ -471,7 +508,9 @@ void instruction()
     cout << "Your health will decrease by colliding with enemies and by fire of enemies.";
     gotoxy(25, 19);
     cout << "Your level will pass by touching with gate after killing all enemies";
-    gotoxy(35, 22);
+    gotoxy(25, 21);
+    cout << "Your Last level will pass by touching with Princess after killing Kratos";
+    gotoxy(35, 24);
     cout << "Press any key for back...";
     getch();
 }
@@ -498,8 +537,27 @@ void credits()
     cout << "Press any key for back...";
     getch();
 }
+void Lastcredits()
+{
+    string line[5] = {"          Game Design By WALI AHMAD          ", "         Character Art By ANAS MUSTAFA       ", "          Enemies Art BY WALI AHMAD          ", "          Princess Art BY WALI AHMAD         ", "Special Thanks to ABDUL SABUR and ABDUL REHMAN"};
+    system("cls");
+    header();
+    setcolor(12);
 
-void printBuddy()
+    for (int i = 0, j = 0; i < 10; i = i + 2, j++)
+    {
+        gotoxy(25, 13 + i);
+        cout << line[j];
+        Sleep(500);
+    }
+
+    gotoxy(20, 26);
+    cout << "Thanks for Your Precious Time. Press Any Key for Exit...";
+    setcolor(15);
+    getch();
+}
+
+void printBuddy(char Buddy[3][4], int &BuddyX, int &BuddyY)
 {
     setcolor(12);
     int PrintBX = BuddyX;
@@ -517,7 +575,7 @@ void printBuddy()
     setcolor(15);
 }
 
-void printBuddyLeft()
+void printBuddyLeft(char BuddyLeft[3][4], int &BuddyX, int &BuddyY)
 {
     setcolor(12);
     int PrintBX = BuddyX;
@@ -535,7 +593,7 @@ void printBuddyLeft()
     setcolor(15);
 }
 
-void teleportBuddy()
+void teleportBuddy(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY)
 {
     char wall = 219;
     char nextleft = getCharAtxy(BuddyX - 1, BuddyY);
@@ -543,9 +601,9 @@ void teleportBuddy()
     char nextleft2 = getCharAtxy(BuddyX - 1, BuddyY + 2);
     if (nextleft == wall && nextleft1 == wall && nextleft2 == wall)
     {
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyX = 64;
-        printBuddyLeft();
+        printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
     }
 
     char nextright = getCharAtxy(BuddyX + 4, BuddyY);
@@ -553,13 +611,13 @@ void teleportBuddy()
     char nextright2 = getCharAtxy(BuddyX + 4, BuddyY + 2);
     if (nextright == wall && nextright1 == wall && nextright2 == wall)
     {
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyX = 3;
-        printBuddy();
+        printBuddy(Buddy, BuddyX, BuddyY);
     }
 }
 
-void eraseBuddy()
+void eraseBuddy(int &BuddyX, int &BuddyY)
 {
     setcolor(12);
     int EraseBX = BuddyX;
@@ -577,7 +635,7 @@ void eraseBuddy()
     setcolor(15);
 }
 
-void moveBuddyDown()
+void moveBuddyDown(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY, string &printDirection, int &score)
 {
     char next = getCharAtxy(BuddyX, BuddyY + 3);
     char next1 = getCharAtxy(BuddyX + 1, BuddyY + 3);
@@ -585,35 +643,35 @@ void moveBuddyDown()
     char next3 = getCharAtxy(BuddyX + 3, BuddyY + 3);
     if (next == ' ' && next1 == ' ' && next2 == ' ' && next3 == ' ')
     {
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyY++;
         if (printDirection == "right")
         {
-            printBuddy();
+            printBuddy(Buddy, BuddyX, BuddyY);
         }
         else
         {
-            printBuddyLeft();
+            printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
         }
     }
 
     else if (next == '$' || next1 == '$' || next2 == '$' || next3 == '$')
     {
         score = score + 10;
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyY++;
         if (printDirection == "right")
         {
-            printBuddy();
+            printBuddy(Buddy, BuddyX, BuddyY);
         }
         else
         {
-            printBuddyLeft();
+            printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
         }
     }
 }
 
-void moveBuddyUp()
+void moveBuddyUp(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY, string &printDirection, int &score, int &Buddyhealth)
 {
     char next = getCharAtxy(BuddyX, BuddyY - 1);
     char next1 = getCharAtxy(BuddyX + 1, BuddyY - 1);
@@ -621,35 +679,49 @@ void moveBuddyUp()
     char next3 = getCharAtxy(BuddyX + 3, BuddyY - 1);
     if (next == ' ' && next1 == ' ' && next2 == ' ' && next3 == ' ')
     {
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyY--;
         if (printDirection == "right")
         {
-            printBuddy();
+            printBuddy(Buddy, BuddyX, BuddyY);
         }
         else
         {
-            printBuddyLeft();
+            printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
         }
     }
 
     if (next == '$' || next1 == '$' || next2 == '$' || next3 == '$')
     {
         score = score + 10;
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyY--;
         if (printDirection == "right")
         {
-            printBuddy();
+            printBuddy(Buddy, BuddyX, BuddyY);
         }
         else
         {
-            printBuddyLeft();
+            printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
+        }
+    }
+    if (next == '.' || next1 == '.' || next2 == '.' || next3 == '.')
+    {
+        Buddyhealth = Buddyhealth - 10;
+        eraseBuddy(BuddyX, BuddyY);
+        BuddyY--;
+        if (printDirection == "right")
+        {
+            printBuddy(Buddy, BuddyX, BuddyY);
+        }
+        else
+        {
+            printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
         }
     }
 }
 
-void moveBuddyLeft()
+void moveBuddyLeft(char BuddyLeft[3][4], int &BuddyX, int &BuddyY, int &princessX, int &princessY, string &printDirection, int &check, bool &game, bool &game2, int &score)
 {
     printDirection = "left";
     char next = getCharAtxy(BuddyX - 1, BuddyY);
@@ -657,26 +729,27 @@ void moveBuddyLeft()
     char next2 = getCharAtxy(BuddyX - 1, BuddyY + 2);
     if (next == ' ' && next1 == ' ' && next2 == ' ')
     {
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyX--;
-        printBuddyLeft();
+        printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
     }
     if (next == '$' || next1 == '$' || next2 == '$')
     {
         score = score + 10;
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyX--;
-        printBuddyLeft();
+        printBuddyLeft(BuddyLeft, BuddyX, BuddyY);
     }
     if ((BuddyX - 1 == princessX + 2) && (BuddyY == princessY))
     {
-        complete();
-        eraseBuddy();
-        erasePrincess();
+        eraseBuddy(BuddyX, BuddyY);
+        erasePrincess(princessX, princessY);
+        complete(check, game, game2);
+        game2 = false;
     }
 }
 
-void moveBuddyRight()
+void moveBuddyRight(char Buddy[3][4], int &BuddyX, int &BuddyY, int &princessX, int &princessY, string &printDirection, int &check, bool &game, bool &game2, int &score, int &Enemy1health, int &Enemy2health, int &Anthealth)
 {
     printDirection = "right";
     char next = getCharAtxy(BuddyX + 4, BuddyY);
@@ -684,53 +757,54 @@ void moveBuddyRight()
     char next2 = getCharAtxy(BuddyX + 4, BuddyY + 2);
     if (next == ' ' && next1 == ' ' && next2 == ' ')
     {
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyX++;
-        printBuddy();
+        printBuddy(Buddy, BuddyX, BuddyY);
     }
     if (next == '$' || next1 == '$' || next2 == '$')
     {
         score = score + 10;
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
         BuddyX++;
-        printBuddy();
+        printBuddy(Buddy, BuddyX, BuddyY);
     }
-    // && Enemy1health == -1 && Enemy2health == -1 && Anthealth == -1
-    if ((next == '|' || next1 == '|' || next2 == '|'))
+
+    if ((next == '|' || next1 == '|' || next2 == '|') && Enemy1health == -1 && Enemy2health == -1 && Anthealth == -1)
     {
-        complete();
-        eraseBuddy();
+        eraseBuddy(BuddyX, BuddyY);
+        complete(check, game, game2);
     }
     if ((BuddyX + 3 == princessX - 1) && (BuddyY == princessY))
     {
-        complete();
-        eraseBuddy();
-        erasePrincess();
+        eraseBuddy(BuddyX, BuddyY);
+        erasePrincess(princessX, princessY);
+        complete(check, game, game2);
+        game2 = false;
     }
 }
 
-void controlBuddy()
+void controlBuddy(char Buddy[3][4], char BuddyLeft[3][4], int &BuddyX, int &BuddyY, int &princessX, int &princessY, string &printDirection, bool &isJump, int &jumpTick, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount, int &check, bool &game, bool &game2, int &score, int &Enemy1health, int &Enemy2health, int &Anthealth, int &Buddyhealth)
 {
     if (GetAsyncKeyState(VK_LEFT))
     {
-        moveBuddyLeft();
+        moveBuddyLeft(BuddyLeft, BuddyX, BuddyY, princessX, princessY, printDirection, check, game, game2, score);
     }
 
     if (GetAsyncKeyState(VK_RIGHT))
     {
-        moveBuddyRight();
+        moveBuddyRight(Buddy, BuddyX, BuddyY, princessX, princessY, printDirection, check, game, game2, score, Enemy1health, Enemy2health, Anthealth);
     }
 
     if (GetAsyncKeyState(VK_UP))
     {
-        if (canJump())
+        if (canJump(BuddyX, BuddyY))
         {
             isJump = true;
         }
     }
     if (isJump)
     {
-        moveBuddyUp();
+        moveBuddyUp(Buddy, BuddyLeft, BuddyX, BuddyY, printDirection, score, Buddyhealth);
         jumpTick += 1;
         if (jumpTick == 4)
         {
@@ -740,16 +814,16 @@ void controlBuddy()
     }
     else
     {
-        moveBuddyDown();
+        moveBuddyDown(Buddy, BuddyLeft, BuddyX, BuddyY, printDirection, score);
     }
 
     if (GetAsyncKeyState(VK_SPACE))
     {
-        createBullet();
+        createBullet(BuddyX, BuddyY, printDirection, bulletX, bulletY, bulletDirection, bulletCount);
     }
 }
 
-bool canJump()
+bool canJump(int &BuddyX, int &BuddyY)
 {
     char below1 = getCharAtxy(BuddyX, BuddyY + 3);
     char below2 = getCharAtxy(BuddyX + 1, BuddyY + 3);
@@ -765,7 +839,7 @@ bool canJump()
     }
 }
 
-void printEnemy1()
+void printEnemy1(char Enemy[3][5], int &enemy1X, int &enemy1Y)
 {
     setcolor(10);
     int EnemyP1X = enemy1X;
@@ -783,7 +857,7 @@ void printEnemy1()
     setcolor(15);
 }
 
-void eraseEnemy1()
+void eraseEnemy1(int &enemy1X, int &enemy1Y)
 {
     setcolor(10);
     int EnemyP1X = enemy1X;
@@ -801,7 +875,7 @@ void eraseEnemy1()
     setcolor(15);
 }
 
-void moveEnemy1()
+void moveEnemy1(char Enemy[3][5], int &enemy1X, int &enemy1Y, string &enemy1direction, int &Enemy1health)
 {
     if (Enemy1health > 0)
     {
@@ -810,9 +884,9 @@ void moveEnemy1()
             char next = getCharAtxy(enemy1X, enemy1Y - 1);
             if (next == ' ')
             {
-                eraseEnemy1();
+                eraseEnemy1(enemy1X, enemy1Y);
                 enemy1Y--;
-                printEnemy1();
+                printEnemy1(Enemy, enemy1X, enemy1Y);
             }
             if (next == '#')
             {
@@ -824,9 +898,9 @@ void moveEnemy1()
             char next = getCharAtxy(enemy1X, enemy1Y + 3);
             if (next == ' ')
             {
-                eraseEnemy1();
+                eraseEnemy1(enemy1X, enemy1Y);
                 enemy1Y++;
-                printEnemy1();
+                printEnemy1(Enemy, enemy1X, enemy1Y);
             }
             if (next == '#')
             {
@@ -836,7 +910,7 @@ void moveEnemy1()
     }
     if (Enemy1health == 0)
     {
-        eraseEnemy1();
+        eraseEnemy1(enemy1X, enemy1Y);
         Enemy1health = -1;
         enemy1X = 0;
         enemy1Y = 0;
@@ -845,7 +919,7 @@ void moveEnemy1()
     }
 }
 
-void printEnemy2()
+void printEnemy2(char Enemy[3][5], int &enemy2X, int &enemy2Y)
 {
     setcolor(13);
     int EnemyP2X = enemy2X;
@@ -864,7 +938,7 @@ void printEnemy2()
     setcolor(15);
 }
 
-void eraseEnemy2()
+void eraseEnemy2(int &enemy2X, int &enemy2Y)
 {
     setcolor(10);
     int EnemyP2X = enemy2X;
@@ -882,7 +956,7 @@ void eraseEnemy2()
     setcolor(15);
 }
 
-void moveEnemy2()
+void moveEnemy2(char Enemy[3][5], int &enemy2X, int &enemy2Y, string &enemy2direction, int &Enemy2health)
 {
 
     if (Enemy2health > 0)
@@ -892,9 +966,9 @@ void moveEnemy2()
             char next = getCharAtxy(enemy2X - 1, enemy2Y + 1);
             if (next == ' ')
             {
-                eraseEnemy2();
+                eraseEnemy2(enemy2X, enemy2Y);
                 enemy2X--;
-                printEnemy2();
+                printEnemy2(Enemy, enemy2X, enemy2Y);
             }
             if (next == '#')
             {
@@ -907,9 +981,9 @@ void moveEnemy2()
             char next = getCharAtxy(enemy2X + 5, enemy2Y + 1);
             if (next == ' ')
             {
-                eraseEnemy2();
+                eraseEnemy2(enemy2X, enemy2Y);
                 enemy2X++;
-                printEnemy2();
+                printEnemy2(Enemy, enemy2X, enemy2Y);
             }
             if (next == '#')
             {
@@ -919,7 +993,7 @@ void moveEnemy2()
     }
     if (Enemy2health == 0)
     {
-        eraseEnemy2();
+        eraseEnemy2(enemy2X, enemy2Y);
         Enemy2health = -1;
         enemy2X = 0;
         enemy2Y = 0;
@@ -928,7 +1002,7 @@ void moveEnemy2()
     }
 }
 
-void printAnt()
+void printAnt(char Ant[3][5], int &AntX, int &AntY)
 {
     setcolor(06);
     int AntPX = AntX;
@@ -947,7 +1021,7 @@ void printAnt()
     setcolor(15);
 }
 
-void eraseAnt()
+void eraseAnt(int &AntX, int &AntY)
 {
     setcolor(06);
     int AntPX = AntX;
@@ -966,9 +1040,9 @@ void eraseAnt()
     setcolor(15);
 }
 
-void AntBullet()
+void AntBullet(int &BuddyX, int &BuddyY, int &AntX, int &AntY, int AntBulletX[10], int AntBulletY[10], int &AntCount, int &Anthealth, bool &AntFlag)
 {
-    if ((AntX < BuddyX + 20) && (AntY == BuddyY) && AntFlag)
+    if ((AntY == BuddyY) && AntFlag)
     {
         setcolor(06);
         AntBulletX[AntCount] = AntX - 1;
@@ -981,7 +1055,7 @@ void AntBullet()
 
     if (Anthealth == 0)
     {
-        eraseAnt();
+        eraseAnt(AntX, AntY);
         Anthealth = -1;
         AntX = 0;
         AntY = 0;
@@ -991,15 +1065,20 @@ void AntBullet()
     }
 }
 
-void moveAntBullet()
+void moveAntBullet(int AntBulletX[10], int AntBulletY[10], int &AntCount)
 {
     for (int x = 0; x < AntCount; x++)
     {
         char next = getCharAtxy(AntBulletX[x] - 1, AntBulletY[x]);
-        if (next != ' ')
+        char next1 = getCharAtxy(AntBulletX[x], AntBulletY[x] - 1);
+        char head = 234;
+        char hand = 178;
+        char body = 155;
+        char leg = '\\';
+        if (next != ' ' || (next1 == head || next1 == hand || next1 == body))
         {
             eraseAntBullet(AntBulletX[x], AntBulletY[x]);
-            deleteAntBullet(x);
+            deleteAntBullet(x, AntBulletX, AntBulletY, AntCount);
         }
         else
         {
@@ -1024,7 +1103,7 @@ void eraseAntBullet(int x, int y)
     cout << " ";
 }
 
-void deleteAntBullet(int index)
+void deleteAntBullet(int index, int AntBulletX[10], int AntBulletY[10], int &AntCount)
 {
     int x = index;
     while (x < AntCount)
@@ -1036,7 +1115,7 @@ void deleteAntBullet(int index)
     AntCount--;
 }
 
-void printPrincess()
+void printPrincess(char princess[3][3], int &princessX, int &princessY)
 {
     int princessPX = princessX;
     int princessPY = princessY;
@@ -1054,7 +1133,7 @@ void printPrincess()
     setcolor(15);
 }
 
-void erasePrincess()
+void erasePrincess(int &princessX, int &princessY)
 {
     int princessPX = princessX;
     int princessPY = princessY;
@@ -1070,20 +1149,20 @@ void erasePrincess()
     }
 }
 
-void movePrincessDown()
+void movePrincessDown(char princess[3][3], int &princessX, int &princessY)
 {
     char next = getCharAtxy(princessX, princessY + 3);
     char next1 = getCharAtxy(princessX + 1, princessY + 3);
     char next2 = getCharAtxy(princessX + 2, princessY + 3);
     if (next == ' ' && next1 == ' ' && next2 == ' ')
     {
-        erasePrincess();
+        erasePrincess(princessX, princessY);
         princessY++;
-        printPrincess();
+        printPrincess(princess, princessX, princessY);
     }
 }
 
-void jailOpen()
+void jailOpen(int &jailX, int &jailY)
 {
     int jailPX = jailX;
     int jailPY = jailY;
@@ -1095,7 +1174,7 @@ void jailOpen()
     }
 }
 
-void createBullet()
+void createBullet(int &BuddyX, int &BuddyY, string &printDirection, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount)
 {
     if (printDirection == "right")
     {
@@ -1132,7 +1211,7 @@ void createBullet()
     }
 }
 
-void movebullet()
+void movebullet(int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount)
 {
     for (int x = 0; x < bulletCount; x++)
     {
@@ -1142,7 +1221,7 @@ void movebullet()
             if (next != ' ')
             {
                 eraseBullet(bulletX[x], bulletY[x]);
-                deleteBullet(x);
+                deleteBullet(x, bulletX, bulletY, bulletDirection, bulletCount);
             }
             else
             {
@@ -1158,7 +1237,7 @@ void movebullet()
             if (next != ' ')
             {
                 eraseBullet(bulletX[x], bulletY[x]);
-                deleteBullet(x);
+                deleteBullet(x, bulletX, bulletY, bulletDirection, bulletCount);
             }
             else
             {
@@ -1170,7 +1249,7 @@ void movebullet()
     }
 }
 
-void deleteBullet(int index)
+void deleteBullet(int index, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount)
 {
     int x = index;
     while (x < bulletCount)
@@ -1197,7 +1276,7 @@ void eraseBullet(int x, int y)
     cout << " ";
 }
 
-void printkratos()
+void printkratos(char Kratos[3][7], int &KratosX, int &KratosY)
 {
     int KratosPX = KratosX;
     int KratosPY = KratosY;
@@ -1212,7 +1291,7 @@ void printkratos()
         KratosPY++;
     }
 }
-void erasekratos()
+void erasekratos(int &KratosX, int &KratosY)
 {
     int KratosPX = KratosX;
     int KratosPY = KratosY;
@@ -1227,7 +1306,7 @@ void erasekratos()
         KratosPY++;
     }
 }
-void movekratos()
+void movekratos(char Kratos[3][7], int &BuddyX, int &BuddyY, int &KratosX, int &KratosY, int &kratosHealth)
 {
     char wall = 219;
     if (kratosHealth > 0)
@@ -1235,12 +1314,9 @@ void movekratos()
 
         bool canMove = true;
         int xDiff = BuddyX - KratosX;
-        // int yDiff = BuddyY - KratosY;
         int xOffset = 0;
         int yOffset = 0;
-        erasekratos();
-        // if (abs(xDiff) > abs(yDiff))
-        // {
+        erasekratos(KratosX, KratosY);
         if (xDiff < 0)
         {
             xOffset = -1;
@@ -1249,42 +1325,25 @@ void movekratos()
         {
             xOffset = 1;
         }
-        // }
-        // else
-        // {
-        //     if (yDiff < 0)
-        //     {
-        //         yOffset = -1;
-        //     }
-        //     else
-        //     {
-        //         yOffset = 1;
-        //     }
-        // }
-
         char next;
         for (int i = 0; i < 7; i++)
         {
             next = getCharAtxy(KratosX + xOffset + i, KratosY + yOffset);
-            // for (int j = 0; j < 3; j++)
-            // {
             if (next == '#' && next == wall)
             {
                 canMove = false;
                 break;
             }
-            // }
         }
         if (canMove)
         {
             KratosX += xOffset;
-            // KratosY += yOffset;
         }
-        printkratos();
+        printkratos(Kratos, KratosX, KratosY);
     }
     if (kratosHealth == 0)
     {
-        erasekratos();
+        erasekratos(KratosX, KratosY);
         kratosHealth = -1;
         KratosX = 0;
         KratosY = 0;
@@ -1293,7 +1352,7 @@ void movekratos()
     }
 }
 
-void collision()
+void collision(int &Buddyhealth, int &enemy1X, int &enemy1Y, int &enemy2X, int &enemy2Y, int &AntX, int &AntY, int &KratosX, int &KratosY, int bulletX[100], int bulletY[100], char bulletDirection[100], int &bulletCount, int &Enemy1health, int &Enemy2health, int &Anthealth, int &kratosHealth, int &score)
 {
     for (int x = 0; x < bulletCount; x++)
     {
@@ -1303,8 +1362,8 @@ void collision()
             {
                 eraseBullet(bulletX[x], bulletY[x]);
                 Enemy1health = Enemy1health - 5;
-                addScore();
-                deleteBullet(x);
+                addScore(score);
+                deleteBullet(x, bulletX, bulletY, bulletDirection, bulletCount);
             }
         }
 
@@ -1314,8 +1373,8 @@ void collision()
             {
                 eraseBullet(bulletX[x], bulletY[x]);
                 Enemy2health = Enemy2health - 5;
-                addScore();
-                deleteBullet(x);
+                addScore(score);
+                deleteBullet(x, bulletX, bulletY, bulletDirection, bulletCount);
             }
         }
 
@@ -1325,8 +1384,8 @@ void collision()
             {
                 eraseBullet(bulletX[x], bulletY[x]);
                 Anthealth = Anthealth - 5;
-                addScore();
-                deleteBullet(x);
+                addScore(score);
+                deleteBullet(x, bulletX, bulletY, bulletDirection, bulletCount);
             }
         }
 
@@ -1336,25 +1395,25 @@ void collision()
             {
                 eraseBullet(bulletX[x], bulletY[x]);
                 kratosHealth = kratosHealth - 5;
-                addScore();
-                deleteBullet(x);
+                addScore(score);
+                deleteBullet(x, bulletX, bulletY, bulletDirection, bulletCount);
             }
         }
     }
 }
 
-void printScore()
+void printScore(int &score)
 {
     gotoxy(75, 8);
     cout << "Score: " << score;
 }
 
-void addScore()
+void addScore(int &score)
 {
     score++;
 }
 
-void printBuddyHealth()
+void printBuddyHealth(int &Buddyhealth)
 {
     gotoxy(75, 10);
     cout << "Your Health:    ";
@@ -1362,16 +1421,16 @@ void printBuddyHealth()
     cout << "Your Health: " << Buddyhealth;
 }
 
-void Printenemyhealth()
+void Printenemyhealth(bool &game, bool &game2, int &Enemy1health, int &Enemy2health, int &Anthealth, int &kratosHealth)
 {
-    if (Enemy1health > 0)
+    if (Enemy1health > 0 && game == true)
     {
         gotoxy(75, 12);
         cout << "Botchan Health:   ";
         gotoxy(75, 12);
         cout << "Botchan Health: " << Enemy1health;
     }
-    if (Enemy2health > 0)
+    if (Enemy2health > 0 && game == true)
     {
         gotoxy(75, 13);
         cout << "Titchi Health:   ";
@@ -1379,7 +1438,7 @@ void Printenemyhealth()
         cout << "Titchi Health: " << Enemy2health;
     }
 
-    if (Anthealth > 0)
+    if (Anthealth > 0 && game == true)
     {
         gotoxy(75, 14);
         cout << "Sadara Health:    ";
@@ -1387,7 +1446,7 @@ void Printenemyhealth()
         cout << "Sadara Health: " << Anthealth;
     }
 
-    if (kratosHealth > 0)
+    if (kratosHealth > 0 && (game2 == true && game == false))
     {
         gotoxy(75, 15);
         cout << "Kratos Health:    ";
@@ -1396,22 +1455,38 @@ void Printenemyhealth()
     }
 }
 
-void gameoverCollsion()
+void gameoverCollsion(int &BuddyX, int &BuddyY, int &Buddyhealth, int &enemy1X, int &enemy1Y, int &enemy2X, int &enemy2Y, int &KratosX, int &KratosY, int AntBulletX[10], int AntBulletY[10], int &AntCount, int &Enemy1health, int &Enemy2health, int &kratosHealth)
 {
     // enemy1
     if (Enemy1health > 0)
     {
+        for (int i = -2; i < 3; i++) // right
+        {
+            if (BuddyX + 3 == enemy1X - 1 && BuddyY == enemy1Y + i)
+            {
+                Buddyhealth = 0;
+            }
+        }
+
         if (BuddyX + 3 == enemy1X - 1 && BuddyY == enemy1Y) // right
         {
             Buddyhealth = 0;
         }
-        if ((BuddyX == enemy1X + 1 && BuddyY - 1 == enemy1Y + 2) || (BuddyX == enemy1X - 1 && BuddyY - 1 == enemy1Y + 2) || (BuddyX == enemy1X - 2 && BuddyY - 1 == enemy1Y + 2) || (BuddyX == enemy1X - 3 && BuddyY - 1 == enemy1Y + 2) || (BuddyX + 1 == enemy1X && BuddyY - 1 == enemy1Y + 2) || (BuddyX + 2 == enemy1X && BuddyY - 1 == enemy1Y + 2) || (BuddyX + 3 == enemy1X && BuddyY - 1 == enemy1Y + 2)) // up
+
+        for (int i = -3; i < 8; i++) // enemy up
         {
-            Buddyhealth = 0;
+            if (BuddyX == enemy1X + i && BuddyY - 1 == enemy1Y + 2)
+            {
+                Buddyhealth = 0;
+            }
         }
-        if ((BuddyX == enemy1X + 1 && BuddyY + 2 == enemy1Y - 1) || (BuddyX == enemy1X - 1 && BuddyY + 2 == enemy1Y - 1) || (BuddyX == enemy1X - 2 && BuddyY + 2 == enemy1Y - 1) || (BuddyX == enemy1X - 3 && BuddyY + 2 == enemy1Y - 1) || (BuddyX + 1 == enemy1X && BuddyY + 2 == enemy1Y - 1) || (BuddyX + 2 == enemy1X && BuddyY + 2 == enemy1Y - 1) || (BuddyX + 3 == enemy1X && BuddyY + 2 == enemy1Y - 1)) // down
+
+        for (int i = -3; i < 8; i++) // Enemy down
         {
-            Buddyhealth = 0;
+            if (BuddyX == enemy1X + i && BuddyY + 2 == enemy1Y - 1)
+            {
+                Buddyhealth = 0;
+            }
         }
     }
 
@@ -1422,17 +1497,25 @@ void gameoverCollsion()
         {
             Buddyhealth = 0;
         }
-        if (BuddyX - 1 == enemy2X + 5 && BuddyY == enemy2Y) // left
+        if (BuddyX - 1 == enemy2X + 4 && BuddyY == enemy2Y) // left
         {
             Buddyhealth = 0;
         }
-        if (BuddyX == enemy2X && BuddyY - 1 == enemy2Y + 2) // up
+
+        for (int i = -3; i < 8; i++) // enemy  up
         {
-            Buddyhealth = 0;
+            if (BuddyX == enemy2X + i && BuddyY - 1 == enemy2Y + 2)
+            {
+                Buddyhealth = 0;
+            }
         }
-        if (BuddyX == enemy2X && BuddyY + 2 == enemy2Y) // down
+
+        for (int i = -3; i < 8; i++) // Enemy Down
         {
-            Buddyhealth = 0;
+            if (BuddyX == enemy2X + i && BuddyY + 2 == enemy2Y - 1)
+            {
+                Buddyhealth = 0;
+            }
         }
     }
     // ant
@@ -1441,6 +1524,7 @@ void gameoverCollsion()
         if (AntBulletX[i] == BuddyX + 4 && (AntBulletY[i] == BuddyY || AntBulletY[i] == BuddyY + 1 || AntBulletY[i] == BuddyY + 2))
         {
             Buddyhealth = Buddyhealth - 10;
+            eraseAntBullet(AntBulletX[i], AntBulletY[i]);
         }
     }
 
@@ -1448,7 +1532,7 @@ void gameoverCollsion()
     if (kratosHealth > 0)
     {
         // kratos
-        if (BuddyX + 3 == KratosX - 1 && BuddyY == KratosY) // right
+        if (BuddyX + 4 == KratosX - 1 && BuddyY == KratosY) // right
         {
             Buddyhealth = 0;
         }
@@ -1456,19 +1540,22 @@ void gameoverCollsion()
         {
             Buddyhealth = 0;
         }
-        if (BuddyX == KratosX && (BuddyY + 3 == KratosY || BuddyY + 3 == KratosY + 1 || BuddyY + 3 == KratosY + 2 || BuddyY + 3 == KratosY + 3 || BuddyY + 3 == KratosY + 4 || BuddyY + 3 == KratosY + 5 || BuddyY + 3 == KratosY + 6 || BuddyY + 3 == KratosY + 7)) // down
+        for (int i = -3; i < 10; i++) // Enemy Down
         {
-            Buddyhealth = 0;
+            if (BuddyX == KratosX + i && BuddyY + 2 == KratosY - 1)
+            {
+                Buddyhealth = 0;
+            }
         }
     }
 }
 
-void gameover()
+void gameover(int &Buddyhealth, bool &game, bool &game2)
 {
     if (Buddyhealth == 0)
     {
         game = false;
-        second = false;
+        game2 = false;
         system("cls");
         setcolor(12);
         gotoxy(20, 15);
@@ -1480,10 +1567,10 @@ void gameover()
     }
 }
 
-void complete()
+void complete(int &check, bool &game, bool &game2)
 {
     game = false;
-    second = false;
+    // game2 = false;
     system("cls");
     setcolor(12);
     gotoxy(20, 15);
@@ -1492,16 +1579,26 @@ void complete()
     cout << endl;
     cout << endl;
     setcolor(15);
-    second = true;
+    // if (check == 0)
+    // {
+    //     game2 = true;
+    //     check = 1;
+    // }
 }
 
-void cordinates()
+void generateRandomCoin(int &count)
 {
-
-    gotoxy(75, 16);
-    cout << BuddyX << " " << BuddyY;
-    gotoxy(75, 17);
-    cout << AntBulletX[0] << " " << AntBulletY[0];
+    setcolor(03);
+    if (count < 5)
+    {
+        int x;
+        x = 3 + rand() % 65;
+        gotoxy(x, 20);
+        cout << '$';
+        count = count + 1;
+    }
+    
+    setcolor(15);
 }
 
 void loadMaze1(char Maze1[26][70])
@@ -1544,7 +1641,7 @@ void loadMaze2(char Maze2[26][71])
     }
     MazeTwo.close();
 }
-void loadBuddy()
+void loadBuddy(char Buddy[3][4])
 {
     char fireBuddyHead = 234;
     char fireBuddyBody = 178;
@@ -1578,8 +1675,7 @@ void loadBuddy()
     }
     rightBuddyFile.close();
 }
-
-void loadBuddyLeft()
+void loadBuddyLeft(char BuddyLeft[3][4])
 {
     char fireBuddyHead = 234;
     char fireBuddyBody = 178;
@@ -1613,8 +1709,7 @@ void loadBuddyLeft()
     }
     leftBuddyFile.close();
 }
-
-void loadPrincess()
+void loadPrincess(char princess[3][3])
 {
     char head = 148;
     char center = 219;
@@ -1658,8 +1753,7 @@ void loadPrincess()
     }
     PrincessFile.close();
 }
-
-void loadEnemy()
+void loadEnemy(char Enemy[3][5])
 {
     fstream EnemyFile;
     EnemyFile.open("Enemy.txt", ios::in);
@@ -1675,8 +1769,7 @@ void loadEnemy()
     }
     EnemyFile.close();
 }
-
-void loadAnt()
+void loadAnt(char Ant[3][5])
 {
     fstream AntFile;
     AntFile.open("Ant.txt", ios::in);
@@ -1692,7 +1785,7 @@ void loadAnt()
     }
     AntFile.close();
 }
-void loadKratos()
+void loadKratos(char Kratos[3][7])
 {
     fstream KratosFile;
     KratosFile.open("Kratos.txt", ios::in);
@@ -1707,6 +1800,22 @@ void loadKratos()
         row++;
     }
     KratosFile.close();
+}
+void loadLevel(char &Level)
+{
+    fstream LevelFile;
+    LevelFile.open("Level.txt", ios::in);
+    string line;
+    getline(LevelFile, line);
+    Level = line[0];
+    LevelFile.close();
+}
+void writeLevel(char &Level, char number)
+{
+    fstream LevelFile;
+    LevelFile.open("Level.txt", ios::out);
+    LevelFile << number;
+    LevelFile.close();
 }
 void gotoxy(int x, int y)
 {
